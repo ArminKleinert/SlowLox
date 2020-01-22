@@ -19,6 +19,10 @@ stackoverflow.
 The coding style is not consistent because I am working on this code at
 differing times and without touching files that I am done with again.
 
+But why am I just converting the Java-code instead of following the tutorial?
+The answer: I did follow the the tutorial, but the code is lost because I 
+didn't bother creating a git-repo. (Don't be like that, ok?)
+
 ## Running it
 
 Go to the main directory, open your command line and run  
