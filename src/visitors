@@ -1,0 +1,27 @@
+Stmt::Visitor should provide the following methods:
+visit_block_stmt(Stmt::Block) # => R
+visit_class_stmt(Stmt::Class) # => R
+visit_expression_stmt(Stmt::Expression) # => R
+visit_function_stmt(Stmt::Function) # => R
+visit_if_stmt(Stmt::If) # => R
+visit_print_stmt(Stmt::Print) # => R
+visit_return_stmt(Stmt::Return) # => R
+visit_var_stmt(Stmt::Var) # => R
+visit_while_stmt(Stmt::While) # => R
+Where R is a generic type which the function will return. Because of Rubys dynamic types, enforcing this is up to the programmer.
+
+
+Expr::Visitor should provide the following methods:
+visit_assign_expr(Expr::Assign) # => R
+visit_binary_expr(Expr::Binary) # => R
+visit_call_expr(Expr::Call) # => R
+visit_get_expr(Expr::Get) # => R
+visit_grouping_expr(Expr::Grouping) # => R
+visit_literal_expr(Expr::Literal) # => R
+visit_logical_expr(Expr::Logical) # => R
+visit_set_expr(Expr::Set) # => R
+visit_super_expr(Expr::Super) # => R
+visit_this_expr(Expr::This) # => R
+visit_unary_expr(Expr::Unary) # => R
+visit_variable_expr(Expr::Variable) # => R
+Where R is, again, a generic type which the function will return. Because of Rubys dynamic types, enforcing this is up to the programmer.
