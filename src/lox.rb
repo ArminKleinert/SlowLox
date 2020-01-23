@@ -33,9 +33,11 @@ module RbLox
         
         parser = Parser.new tokens
         
-#        statements = parser.parse()
+        statements = parser.parse()
         
-#        return if @@had_error
+        puts statements
+        
+        return if @@had_error
         
 #        resolver = Resolver.new @@Interpreter
 #        resolver.resolve statements
@@ -67,10 +69,10 @@ module RbLox
       
       # Specialized helper method for error(...)
       def error_with_token(token, message)
-        if token.type == TokenType::EOF
-          report token.line_or_token, ' at end', message
+        if token.type == :eof
+          report token.line, ' at end', message
         else
-          report token.line_or_token, " at '#{token.lexeme}'#{message}"
+          report token.line, " at '#{token.lexeme}'", message
         end
       end
       

@@ -1,2 +1,2 @@
 # Load lox.rb, which contains the main code.
-require './src/lox.rb'
+require_relative './src/lox.rb'
