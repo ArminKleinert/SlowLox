@@ -40,6 +40,20 @@ module RbLox
     # environment : Environment
     def execute_block(statements, environment)
       previous = @environment
+      begin
+        @environment = environment
+        
+        statements.each do |statement|
+          execute statement
+        end
+      ensure
+        self.environment = previous
+      end
+      nil
+    end
+    
+    def visit_block_stmt(stmt)
+      execute_block stmt.statements, Environment.new(@environment)
     end
   end
  end
