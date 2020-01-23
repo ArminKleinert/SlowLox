@@ -1,4 +1,5 @@
-# RbLox
+# SlowLox
+
 A 1-to-1 conversion of JLox to Ruby.
 
 For the original code see https://github.com/munificent/craftinginterpreters
