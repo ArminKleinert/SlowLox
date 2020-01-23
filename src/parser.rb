@@ -16,6 +16,7 @@ module RbLox
     def parse
       statements = []
       statements << declaration() until is_at_end?
+      statements
     end
     
     def expression

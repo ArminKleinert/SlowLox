@@ -10,7 +10,7 @@ module RbLox
     private_class_method :new
   
     class << self # Open static class
-#      @@Interpreter = Interpreter.new
+      @@Interpreter = Interpreter.new
       
       @@had_error = false
       @@had_runtime_error = false
@@ -35,7 +35,8 @@ module RbLox
         
         statements = parser.parse()
         
-        puts statements
+        puts statements.class
+        puts statements.to_s
         
         return if @@had_error
         
@@ -81,7 +82,7 @@ module RbLox
         @@had_error = true
       end
       
-      # ScriptError, SecurityError, StandardError, SignalException
+      # LoxRuntimeError, RuntimeError, ScriptError, SecurityError, StandardError, SignalException
       def runtime_error(error)
         STDERR.puts "#{error.message}\n[line #{error.token.line}]"
         @@had_runtime_error = true
