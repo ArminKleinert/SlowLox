@@ -21,16 +21,12 @@ module RbLox
         self.last
       end
     end
-    @scopes = Stack.new # Stack of Map<String, Boolean>
-
-    # FunctionType
-    @current_function = :none
-
-    # ClassType
-    @current_class = :none
 
     def initialize(interpreter)
       @interpreter = interpreter
+      @scopes = Stack.new # Stack of Map<String, Boolean>
+      @current_class = :none # ClassType
+      @current_function = :none # FunctionType
     end
 
     # statements : Array<Stmt>
@@ -69,11 +65,11 @@ module RbLox
       
       unless stmt.superclass.nil?
         begin_scope()
-        scopes.peek()['super'] = true
+        @scopes.peek()['super'] = true
       end
       
       begin_scope()
-      scopes.peek()['this'] = true
+      @scopes.peek()['this'] = true
       
       stmt.methods do |method|
         declaration = :method # FunctionType
@@ -92,7 +88,7 @@ module RbLox
       nil
     end
     
-    def visit_expr_stmt(stmt)
+    def visit_expression_stmt(stmt)
       resolve_expr stmt.expression
       nil
     end
@@ -218,7 +214,7 @@ module RbLox
     end
     
     def visit_variable_expr(expr)
-      if !scopes.empty? && scopes.peek()[expr.name.lexeme] == false
+      if !@scopes.empty? && @scopes.peek()[expr.name.lexeme] == false
         Lox.error expr.name, 'Cannot read local variable in its own initializer.'
       else
         resolve_local expr, expr.name
@@ -255,19 +251,19 @@ module RbLox
     
     
     def begin_scope
-      scopes << Hash.new # Map<String, Boolean>
+      @scopes << Hash.new # Map<String, Boolean>
     end
     
     def end_scope
-      scopes.pop
+      @scopes.pop
     end
     
     
     # name : Token
     def declare(name)
-      return if scopes.empty?
+      return if @scopes.empty?
       
-      scope = scopes.peek()
+      scope = @scopes.peek()
       
       if scope.has_key?(name.lexeme)
         Lox.error name, 'Variable with this name already declared in this scope.'
@@ -278,7 +274,7 @@ module RbLox
     
     # name : Token
     def define(name)
-      scopes.peek()[name.lexeme] = true unless scopes.empty?
+      @scopes.peek()[name.lexeme] = true unless @scopes.empty?
     end
     
     # expr : Expr
@@ -287,9 +283,9 @@ module RbLox
       # Definitly not the most readable version, 
       # but it gets the point across.
       # See Interpreter.resolve(...)
-      (0...(scopes.size)).reverse_each do |i|
-        if scopes[i].has_key?(name.lexeme)
-          interpreter.resolve expr, (scopes.size - 1 - i)
+      (0...(@scopes.size)).reverse_each do |i|
+        if @scopes[i].has_key?(name.lexeme)
+          interpreter.resolve expr, (@scopes.size - 1 - i)
           break
         end
       end

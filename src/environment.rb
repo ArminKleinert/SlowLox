@@ -14,7 +14,7 @@ module RbLox
       elsif @enclosing # if enclosing != nil
         @enclosing.get name
       else
-        raise LoxRuntimeError.newq(name, "Undefined variable '#{name.lexeme}'.")
+        raise LoxRuntimeError.new(name, "Undefined variable '#{name.lexeme}'.")
       end
     end
     

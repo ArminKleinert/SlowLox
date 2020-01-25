@@ -35,17 +35,14 @@ module RbLox
         
         statements = parser.parse()
         
-        puts statements.class
-        puts statements.to_s
+        return if @@had_error
+        
+        resolver = Resolver.new @@Interpreter
+        resolver.resolve statements
         
         return if @@had_error
         
-#        resolver = Resolver.new @@Interpreter
-#        resolver.resolve statements
-        
-#        return if @@had_error
-        
-#        @@Interpreter.interpret statements
+        @@Interpreter.interpret statements
       end
       
       # Ruby does not have method overloading. Instead, the

@@ -38,7 +38,7 @@ module RbLox
       
       @start = 0
       @current = 0
-      @line = 0
+      @line = 1
     end
     
     def scan_tokens
@@ -156,7 +156,7 @@ module RbLox
       return false if is_at_end?
       return false unless @source[@current] == expected
       
-      current += 1
+      @current += 1
       true
     end
     

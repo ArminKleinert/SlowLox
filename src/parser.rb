@@ -52,7 +52,7 @@ module RbLox
       consume :left_brace, "Expect '(' before class body."
       
       methods = []
-      methods << function('method') until (check(:right_brace) || is_at_end?)
+      methods << function('method') until (check(:right_brace) || is_at_end?())
       
       consume :right_brace, "Expect ')' after class body."
       
@@ -177,7 +177,9 @@ module RbLox
             error peek(), "Cannot have more than 255 parameters"
           end
           
-          break if match(:comma)
+          parameters << consume(:identifier, "Expect parameter name.")
+          
+          break unless match(:comma)
         end
       end
     
@@ -189,7 +191,7 @@ module RbLox
     end
     
     def block
-      statments = []
+      statements = []
       statements << declaration() until (check(:right_brace) || is_at_end?)
       consume :right_brace, "Expect '}' after block."
       statements
@@ -327,7 +329,7 @@ module RbLox
       
       paren = consume :right_paren, "Expect ')' after arguments."
       
-      Expr::call.new callee, paren, arguments
+      Expr::Call.new callee, paren, arguments
     end
     
     # Original name: call

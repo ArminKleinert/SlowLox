@@ -4,12 +4,10 @@ module RbLox
   # Instead of being an interface,
   # LoxCallable has a callable member here.
   # This member can be passed as a block.
-  # Sadly, the arity has to be passed manually.
   # Initializing a new instance works as follows:
   #   LoxCallable.new(arity, &block)
   # Eg.
-  #   LoxCallable.new(3) {|interpr, *args| puts(Time.now)}
-  # This example takes 3 arguments plus the interpreter.
+  #   LoxCallable.new(0) {|interpr, *args| puts(Time.now)}
   #
   # Consider taking a look at
   # https://ruby-doc.org/core-2.7.0/Proc.html
@@ -37,7 +35,7 @@ module RbLox
   end
   
   # A shortcut for the construtor of LoxCallable:
-  # RbLox.loxc(arity, &block)
+  # RbLox.loxc(&block)
   def self.loxc(arity=0, &block)
     LoxCallable.new(arity, &block)
   end
