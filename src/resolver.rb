@@ -31,16 +31,16 @@ module RbLox
 
     # statements : Array<Stmt>
     def resolve(statements)
-      # Apply the resolve_stmt method on each statement
+      # Apply the resolve_single method on each statement
       # in the list statements.
       # This is a shortcut for a verbose 3-line block.
       # See https://stackoverflow.com/questions/18252630/how-to-turn-a-ruby-method-into-a-block
-      statements.each(&method(:resolve_stmt))
+      statements.each(&method(:resolve_single))
     end
     
     def visit_block_stmt(stmt)
       begin_scope()
-      resolve_stmt stmt.statements
+      resolve stmt.statements
       end_scope()
       nil
     end
@@ -60,7 +60,7 @@ module RbLox
       
       unless stmt.superclass.nil?
         current_class = :subclass
-        resolve_expr stmt.superclass
+        resolve_single stmt.superclass
       end
       
       unless stmt.superclass.nil?
@@ -89,7 +89,7 @@ module RbLox
     end
     
     def visit_expression_stmt(stmt)
-      resolve_expr stmt.expression
+      resolve_single stmt.expression
       nil
     end
     
@@ -102,14 +102,14 @@ module RbLox
     end
     
     def visit_if_stmt(stmt)
-      resolve_expr stmt.condition
-      resolve_stmt stmt.then_branch
-      resolve_stmt(stmt.else_branch) unless stmt.else_branch.nil?
+      resolve_single stmt.condition
+      resolve_single stmt.then_branch
+      resolve_single(stmt.else_branch) unless stmt.else_branch.nil?
       nil
     end
     
     def visit_print_stmt(stmt)
-      resolve_expr stmt.expression
+      resolve_single stmt.expression
       nil
     end
     
@@ -123,7 +123,7 @@ module RbLox
           Lox.error stmt.keyword, 'Cannot return from an initializer.'
         end
         
-        resolve_expr stmt.value
+        resolve_single stmt.value
       end
       
       nil
@@ -131,43 +131,43 @@ module RbLox
     
     def visit_var_stmt(stmt)
       declare stmt.name
-      resolve_expr(stmt.initializer) unless stmt.initializer.nil?
+      resolve_single(stmt.initializer) unless stmt.initializer.nil?
       define stmt.name
       nil
     end
     
     def visit_while_stmt(stmt)
-      resolve_expr stmt.condition
-      resolve_stmt stmt.body
+      resolve_single stmt.condition
+      resolve_single stmt.body
       nil
     end
     
     def visit_assign_expr(expr)
-      resolve_expr expr.value
+      resolve_single expr.value
       resolve_local expr, expr.name
       nil
     end
     
     def visit_binary_expr(expr)
-      resolve_expr expr.left
-      resolve_expr expr.right
+      resolve_single expr.left
+      resolve_single expr.right
       nil
     end
     
     def visit_call_expr(expr)
-      resolve_expr expr.callee
+      resolve_single expr.callee
       # Same principle as explained in the resolve(...) method
-      expr.arguments.each(&method(:resolve_expr))
+      expr.arguments.each(&method(:resolve_single))
       nil
     end
     
     def visit_get_expr(expr)
-      resolve_expr expr.object
+      resolve_single expr.object
       nil
     end
     
     def visit_grouping_expr(expr)
-      resolve_expr expr.expression
+      resolve_single expr.expression
       nil
     end
     
@@ -176,14 +176,14 @@ module RbLox
     end
     
     def visit_logical_expr(expr)
-      resolve_expr expr.left
-      resolve_expr expr.right
+      resolve_single expr.left
+      resolve_single expr.right
       nil
     end
     
     def visit_set_expr(expr)
-      resolve_expr expr.value
-      resolve_expr expr.object
+      resolve_single expr.value
+      resolve_single expr.object
       nil
     end
     
@@ -209,7 +209,7 @@ module RbLox
     end
     
     def visit_unary_expr(expr)
-      resolve_expr expr.right
+      resolve_single expr.right
       nil
     end
     
@@ -223,12 +223,7 @@ module RbLox
       nil
     end
     
-    
-    def resolve_stmt(stmt)
-      stmt.accept(self)
-    end
-    
-    def resolve_expr(expr)
+    def resolve_single(expr)
       expr.accept(self)
     end
     
@@ -285,7 +280,7 @@ module RbLox
       # See Interpreter.resolve(...)
       (0...(@scopes.size)).reverse_each do |i|
         if @scopes[i].has_key?(name.lexeme)
-          interpreter.resolve expr, (@scopes.size - 1 - i)
+          @interpreter.resolve expr, (@scopes.size - 1 - i)
           break
         end
       end

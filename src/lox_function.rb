@@ -41,9 +41,9 @@ module RbLox
       begin
         interpreter.execute_block @declaration.body, environment
       rescue Return => return_value
-        is_initializer ? @closure.get_at(0, "this") : return_value.value
+        @is_initializer ? @closure.get_at(0, "this") : return_value.value
       else # No exception was thrown
-        is_initializer ? @closure.get_at(0, "this") : nil
+        @is_initializer ? @closure.get_at(0, "this") : nil
       end
     end
   end

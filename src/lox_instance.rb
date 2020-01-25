@@ -1,3 +1,5 @@
+require_relative './runtime_error.rb'
+
 module RbLox
   class LoxInstance
     
@@ -17,7 +19,7 @@ module RbLox
           method.bind self
         else
           message = "Undefined property '#{name.lexeme}'."
-          raise LoxRuntimeError(name, message)
+          raise LoxRuntimeError.new(name, message)
         end
       end
     end

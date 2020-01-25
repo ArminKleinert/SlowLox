@@ -20,13 +20,13 @@ module RbLox
       attr_reader :name # Token
       attr_reader :value # Expr
       
-      def initialize()
+      def initialize(name, value)
         @name = name
         @value = value
       end
       
       def accept(visitor)
-        visitor.(self)
+        visitor.visit_assign_expr(self)
       end
     end
     

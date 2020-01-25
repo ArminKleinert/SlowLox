@@ -80,41 +80,39 @@ module RbLox
     def for_statement
       consume :left_paren, "Expect '(' after 'for'."
       
-      ###
-      # From the original code:
-      #  if (match(SEMICOLON)) {
-      #    initializer = null;
-      #  } else if (match(VAR)) {
-      #    initializer = varDeclaration();
-      #  } else {
-      #    initializer = expressionStatement();
-      #  }
-      # 
-      # Ruby requires direct intialization, so consider
-      # the match(semicolon) case implicit.
       initializer = nil
-      if match(:var)
+      
+      if match(:semicolon)
+        initializer = nil
+      elsif match(:var)
         initializer = var_declaration()
-      elsif !match(:semicolon)
+      else
         initializer = expression_statement()
       end
       
-      condition = check(:semicolon) || expression()
+      condition = nil
+      unless check(:semicolon)
+        condition = expression()
+      end
       consume :semicolon, "Expect ';' after loop condition."
       
-      increment = check(:right_paren) || expression()
+      increment = nil
+      unless check(:right_paren)
+        increment = expression()
+      end
       consume :right_paren, "Expect ')' after for clauses."
       
       body = statement()
       
-      unless increment
-        body = Stmt::Block.new [body, Stmt::Expression(:increment)]
+      unless increment.nil?
+        body = Stmt::Block.new [body, Stmt::Expression.new(increment)]
       end
       
-      condition = Expr::Literal(true) unless condition
-      body = Stmt::While.new condition, body
+      condition = Expr::Literal.new(true) if condition.nil?
+      body = Stmt::While.new(condition, body)
       
-      body = Stmt::Block.new(initializer, body) if initializer
+      # [initializer, body] is a list literal
+      body = Stmt::Block.new([initializer, body]) unless initializer.nil?
       
       body
     end
@@ -145,7 +143,12 @@ module RbLox
     
     def var_declaration
       name = consume :identifier, "Expect variable name."
-      intializer = match(:equal) ? expression() : nil
+      
+      initializer = nil
+      if match(:equal)
+        initializer = expression()
+      end
+      
       consume :semicolon, "Expect ';' after variable declaration."
       Stmt::Var.new name, initializer
     end
@@ -185,7 +188,7 @@ module RbLox
     
       consume :right_paren, "Expect ')' after parameters."
       
-      consume :left_brace, "Expect '{' after parameters."
+      consume :left_brace, "Expect '{' before #{kind} body."
       body = block()
       Stmt::Function.new name, parameters, body
     end

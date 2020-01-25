@@ -85,7 +85,7 @@ module RbLox
         add_token(match('=') ? :greater_equal : :greater)
       when '/'
         if match('/')
-          advance() until (peek() == "\n" || is_at_end?)
+          advance() while (peek() != "\n" && !is_at_end?)
         else
           add_token :slash
         end
@@ -132,7 +132,7 @@ module RbLox
     end
     
     def string
-      while (peek() == '.' && is_digit?(peek_next()))
+      while (peek() != '"' && !is_at_end?)
         line += 1 if (peek() == "\n")
         advance()
       end
@@ -187,21 +187,21 @@ module RbLox
     
     def is_alpha?(c)
       # Match alpha character and make bool (via double negation !!)
-      !!c.match(/^[[:alpha:]]$/)
+      c && !!c.match(/^[[:alpha:]]$/)
       
       # !!c.match(/[a-zA-Z0-9]/)
     end
     
     def is_alpha_numeric?(c)
       # Match alpha-numeric character and make bool (via double negation !!)
-      !!c.match(/^[[:alnum:]]$/)
+      c && !!c.match(/^[[:alnum:]]$/)
       
       # !!c.match(/[a-zA-Z0-9]/)
     end
     
     def is_digit?(c)
       # Match single digit character and make bool (via double negation !!)
-      !!c.match(/^\d$/)
+      c && !!c.match(/^\d$/)
       
       # !!c.match(/[0-9]/)
     end

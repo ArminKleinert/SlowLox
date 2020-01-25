@@ -40,7 +40,7 @@ module RbLox
     # expr : Expr
     # depth : Int
     def resolve(expr, depth)
-      locals[expr] = depth
+      @locals[expr] = depth
     end
     
     # statements : Array<Stmt>
@@ -54,7 +54,7 @@ module RbLox
           execute statement
         end
       ensure
-        self.environment = previous
+        @environment = previous
       end
       nil
     end
@@ -75,7 +75,7 @@ module RbLox
       @environment.define stmt.name.lexeme, nil
       
       unless stmt.superclass.nil?
-        @environment = Environment.new(environment)
+        @environment = Environment.new(@environment)
         @environment.define "super", superclass
       end
       
@@ -104,8 +104,8 @@ module RbLox
     end
     
     def visit_function_stmt(stmt)
-      function = LoxFunction.new(stmt, environment, false)
-      environment.define stmt.name.lexeme, function
+      function = LoxFunction.new(stmt, @environment, false)
+      @environment.define stmt.name.lexeme, function
       nil
     end
     
@@ -151,11 +151,11 @@ module RbLox
     def visit_assign_expr(expr)
       value = evaluate expr.value
       
-      distance = locals[expr]
+      distance = @locals[expr]
       if distance.nil?
-        @environment.assign_at(distance, expr.name, value)
-      else
         @globals.assign(expr.name, value)
+      else
+        @environment.assign_at(distance, expr.name, value)
       end
       
       value
@@ -274,7 +274,7 @@ module RbLox
     end
     
     def visit_super_expr(expr)
-      distance = locals[expr]
+      distance = @locals[expr]
       super_class = @environment.get_at distance, "super"
       object = @environment.get_at distance - 1, "this"
       
