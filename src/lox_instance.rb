@@ -32,7 +32,7 @@ module RbLox
     # name : Token
     # value : Object
     def set(name, value)
-      @fields[name.lexeme, value]
+      @fields[name.lexeme] = value
     end
     
     alias_method :[]=, :set

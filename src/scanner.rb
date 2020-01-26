@@ -133,12 +133,12 @@ module RbLox
     
     def string
       while (peek() != '"' && !is_at_end?)
-        line += 1 if (peek() == "\n")
+        @line += 1 if (peek() == "\n")
         advance()
       end
       
       if is_at_end?
-        Lox.error line, 'Unterminated string.'
+        Lox.error @line, 'Unterminated string.'
         return
       end
       

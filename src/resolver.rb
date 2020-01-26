@@ -59,7 +59,7 @@ module RbLox
       end
       
       unless stmt.superclass.nil?
-        current_class = :subclass
+        @current_class = :subclass
         resolve_single stmt.superclass
       end
       
@@ -71,7 +71,7 @@ module RbLox
       begin_scope()
       @scopes.peek()['this'] = true
       
-      stmt.methods do |method|
+      stmt.methods.each do |method|
         declaration = :method # FunctionType
         
         if method.name.lexeme == 'init'

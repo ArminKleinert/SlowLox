@@ -177,7 +177,7 @@ module RbLox
         # This is a do-while loop
         loop do
           if parameters.size >= 255
-            error peek(), "Cannot have more than 255 parameters"
+            error peek(), "Cannot have more than 255 parameters."
           end
           
           parameters << consume(:identifier, "Expect parameter name.")
@@ -309,9 +309,9 @@ module RbLox
       if match(:bang, :minus)
         operator = previous()
         right = unary()
-        Expr::Unary.new operator, right
+        return Expr::Unary.new operator, right
       end
-      call_expr()
+      call()
     end
     
     def finish_call(callee)
@@ -335,94 +335,65 @@ module RbLox
       Expr::Call.new callee, paren, arguments
     end
     
-    # Original name: call
-    # call is a method used by the Proc class. It can probably be
-    # defined here safely, but I didn't want to take risks.
-    # This also makes sure that a Parser can never be passed as
-    # a callable.
-    def call_expr
+    def call
       expr = primary()
       
-      # In the original code, this was an infinite loop with a break-condition.
-      # I chose to replace this with the functional approach of setting a
-      # breaking condition.
-      break_loop = false
-      until break_loop
+      loop do
         if match(:left_paren)
           expr = finish_call(expr)
         elsif match(:dot)
           name = consume :identifier, "Expect property name after '.'."
           expr = Expr::Get.new expr, name
         else
-          break_loop = true
+          break
         end
       end
       
       expr
     end
     
-    # The original code used a lot of explicit returns here.
-    # I replaced these with assignments to a variable expr.
-    # This is definitly slower, but more idiomatic (afaik).
     def primary
-      expr = nil
-      if match(:false)
-        expr = Expr::Literal.new false
-      elsif match(:true)
-        expr = Expr::Literal.new true
-      elsif match(:nil)
-        expr = Expr::Literal.new nil
+      return Expr::Literal.new false if match(:false)
+      return Expr::Literal.new true if match(:true)
+      return Expr::Literal.new nil if match(:nil)
+      
+      if match(:number, :string)
+        return Expr::Literal.new previous().literal
       end
       
-      if expr.nil? && match(:number, :string)
-        expr = Expr::Literal.new previous().literal
-      end
-      
-      if expr.nil? && match(:super)
+      if match(:super)
         keyword = previous()
         consume :dot, "Expect '.' after 'super'."
         method = consume :identifier, "Expect superclass method name."
-        expr = Expr::Super.new keyword, method
+        return Expr::Super.new keyword, method
       end
       
-      if expr.nil? && match(:this)
-        expr = Expr::This.new previous()
+      if match(:this)
+        return Expr::This.new previous()
       end
       
-      if expr.nil? && match(:identifier)
-        expr = Expr::Variable.new previous()
+      if match(:identifier)
+        return Expr::Variable.new previous()
       end
       
-      if expr.nil? && match(:left_paren)
+      if match(:left_paren)
         expr = expression()
         consume :right_paren, "Expect ')' after expression."
-        expr = Expr::Grouping.new expr
+        return Expr::Grouping.new expr
       end
       
-      if expr.nil?
-        raise error(peek(), "Expect expression.")
-      end
-      
-      expr
+      raise error(peek(), "Expect expression.")
     end
     
-    # Again, the original used an explicit return here.
-    # This was replaced with an assignment to a variable 'result' to
-    # make it more idiomatic.
-    # 
-    # This code can definitly be optimized. Eg. by using Enumerable.inject.
-    # But it works for now.
     def match(*types)
-      result = false
-      
       types.each do |type|
-        if !result && check(type)
+        if check(type)
           advance()
-          result = true
+          return true
         end
       end
       
-      result
+      false
     end
     
     def consume(type, message)
