@@ -38,8 +38,8 @@ module RbLox
       end
     end
     
-    # Create an alias for get
-    # environment.get(name, value)
+    # Create an alias for assign
+    # environment.assign(name, value)
     # environment[name] = value
     # Both of the above now do the same.
     # https://ruby-doc.org/core-2.7.0/Module.html#method-i-alias_method

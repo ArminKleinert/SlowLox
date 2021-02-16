@@ -93,11 +93,21 @@ module RbLox
   end
 end
 
-if ARGV.size > 1
-  STDERR.puts 'Usage: rblox [script]'
-  exit 64
-elsif ARGV.size == 1
-  RbLox::Lox.run_file ARGV[0]
-else
-  RbLox::Lox.run_prompt()
+# If the script was started externally, these global variables should be set.
+# These are the default settings.
+$rblox_runmain = true unless defined? $rblox_runmain
+$run_prompt = false unless defined? $run_prompt
+
+if $rblox_runmain
+  if ARGV.size > 1
+    STDERR.puts 'Usage: rblox [script]'
+    exit 64
+  elsif ARGV.size == 1
+    RbLox::Lox.run_file ARGV[0]
+  else
+    # If main shall be run and there are no arguments, ignore the prompt no 
+    # matter what the globals say.
+    $run_prompt = true
+  end
+  RbLox::Lox.run_prompt() if $run_prompt
 end
