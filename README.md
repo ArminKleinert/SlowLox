@@ -41,3 +41,5 @@ The code works, but sometimes gives more errors than JLox. I will take care of t
 ## About the name...
 
 Yeah, SlowLox is slow. In my tests JLox was 5-14 times faster.
+
+This gets much worse when recursion is used because Ruby is really bad at that.
