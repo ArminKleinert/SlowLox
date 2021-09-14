@@ -1,12 +1,12 @@
 module RbLox
   class Environment
     attr_reader :enclosing
-    
+
     def initialize(enclosing = nil)
       @enclosing = enclosing
       @values = Hash.new # Map<String, Object
     end
-    
+
     # name : Token
     def get(name)
       if @values.has_key?(name.lexeme)
@@ -17,7 +17,7 @@ module RbLox
         raise LoxRuntimeError.new(name, "Undefined variable '#{name.lexeme}'.")
       end
     end
-    
+
     # Create an alias for get
     # environment.get(...)
     # environment[...]
@@ -25,7 +25,7 @@ module RbLox
     # https://ruby-doc.org/core-2.7.0/Module.html#method-i-alias_method
     # https://blog.bigbinary.com/2012/01/08/alias-vs-alias-method.html
     alias_method :[], :get
-        
+
     # name : Token
     # value : Object
     def assign(name, value)
@@ -37,7 +37,7 @@ module RbLox
         raise LoxRuntimeError.new(name, "Undefined variable '#{name.lexeme}'.")
       end
     end
-    
+
     # Create an alias for assign
     # environment.assign(name, value)
     # environment[name] = value
@@ -45,13 +45,13 @@ module RbLox
     # https://ruby-doc.org/core-2.7.0/Module.html#method-i-alias_method
     # https://blog.bigbinary.com/2012/01/08/alias-vs-alias-method.html
     alias_method :[]=, :assign
-    
+
     # name : String
     # value : Object
     def define(name, value)
       @values[name] = value
     end
-    
+
     # Returns Environment
     # distance : int
     def ancestor(distance)
@@ -61,7 +61,7 @@ module RbLox
       end
       environment
     end
-    
+
     # Returns Object
     # distance : int
     # name : String
@@ -74,7 +74,7 @@ module RbLox
       # is defined for @values though.
       ancestor(distance).values[name]
     end
-    
+
     # distance : int
     # name : Token
     # value : Object
@@ -87,17 +87,18 @@ module RbLox
       # is defined for @values though.
       ancestor(distance).values[name.lexeme] = value
     end
-    
+
     def to_s
       result = values.to_s
       result << " -> #{@enclosing.to_s}" if enclosing
       result
     end
-    
+
     # All methods defined below are protected instead of public.
     # https://ruby-doc.org/core-2.7.0/Module.html#method-i-protected
+
     protected
-    
+
     def values
       @values
     end

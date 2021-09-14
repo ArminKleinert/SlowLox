@@ -9,7 +9,7 @@ module RbLox
       @name = name
       @methods = methods
     end
-    
+
     def find_method(name)
       if @methods.has_key?(name)
         @methods[name]
@@ -19,11 +19,11 @@ module RbLox
         @superclass.find_method(name)
       end
     end
-    
+
     def to_s
       @name
     end
-    
+
     def arity
       initializer = find_method "init"
       initializer.nil? ? 0 : initializer.arity
@@ -34,11 +34,11 @@ module RbLox
     def call(interpreter, arguments)
       instance = LoxInstance.new self
       initializer = find_method "init"
-      
+
       unless initializer.nil?
         initializer.bind(instance).call(interpreter, arguments)
       end
-      
+
       instance
     end
   end

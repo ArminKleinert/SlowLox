@@ -4,7 +4,7 @@ module RbLox
   # LoxRuntimeError seemed like the next best option.
   class LoxRuntimeError < RuntimeError
     attr_reader :token
-    
+
     def initialize(token, message)
       super message
       @token = token

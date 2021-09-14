@@ -19,7 +19,7 @@ module RbLox
 
     # Example:
     # LoxCallable.new("name", 1) { |interpreter, args| ... }
-    def initialize(name="<native fn>", arity=0, &block)
+    def initialize(name = "<native fn>", arity = 0, &block)
       @name = name
       @arity = arity
       @proc = block
@@ -28,15 +28,15 @@ module RbLox
     def call(interpreter, arguments)
       @proc.call(interpreter, *arguments)
     end
-    
+
     def to_s
       @name
     end
   end
-  
+
   # A shortcut for the construtor of LoxCallable:
   # RbLox.loxc(&block)
-  def self.loxc(arity=0, &block)
+  def self.loxc(arity = 0, &block)
     LoxCallable.new(arity, &block)
   end
 end

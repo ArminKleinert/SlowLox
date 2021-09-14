@@ -2,34 +2,45 @@ module RbLox
   class Expr
     # For the definition of Expr::Visitor, see the "visitors" file.
     class Visitor
-      def visit_assign_expr(expr);end
-      def visit_binary_expr(expr);end
-      def visit_call_expr(expr);end
-      def visit_get_expr(expr);end
-      def visit_grouping_expr(expr);end
-      def visit_literal_expr(expr);end
-      def visit_logical_expr(expr);end
-      def visit_set_expr(expr);end
-      def visit_super_expr(expr);end
-      def visit_this_expr(expr);end
-      def visit_unary_expr(expr);end
-      def visit_variable_expr(expr);end
+      def visit_assign_expr(expr) end
+
+      def visit_binary_expr(expr) end
+
+      def visit_call_expr(expr) end
+
+      def visit_get_expr(expr) end
+
+      def visit_grouping_expr(expr) end
+
+      def visit_literal_expr(expr) end
+
+      def visit_logical_expr(expr) end
+
+      def visit_set_expr(expr) end
+
+      def visit_super_expr(expr) end
+
+      def visit_this_expr(expr) end
+
+      def visit_unary_expr(expr) end
+
+      def visit_variable_expr(expr) end
     end
-    
+
     class Assign < Expr
       attr_reader :name # Token
       attr_reader :value # Expr
-      
+
       def initialize(name, value)
         @name = name
         @value = value
       end
-      
+
       def accept(visitor)
         visitor.visit_assign_expr(self)
       end
     end
-    
+
     class Binary < Expr
       attr_reader :left # Expr
       attr_reader :operator # Token

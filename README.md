@@ -26,7 +26,16 @@ didn't bother creating a git-repo. (Don't be like that, ok?)
 ## Running it
 
 Go to the main directory, open your command line and run  
-``ruby rblox.rb``
+``ruby rblox.rb`` Run prompt.  
+``ruby rblox.rb <file>`` Run a single lox file and quit.  
+``ruby rblox.rb <directory>`` Run all lox files in a directory.  
+
+With the `-repl` (or `-interactive`) option, the prompt is started after executing the normal file or directory:  
+``ruby rblox.rb -repl <file>`` Run a single lox file and run prompt.  
+``ruby rblox.rb -repl <directory>`` Run all lox files in a directory and run prompt.  
+
+Use the `-test` option to print which file is currently being run.  
+``ruby rblox.rb -test <directory>`` Run all lox files in a directory and run prompt.  
 
 ## Contributing
 
