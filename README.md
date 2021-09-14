@@ -43,7 +43,7 @@ Please contact me at any time if you have questions or suggestions.
 
 ## What's next?
 
-The code works, but sometimes gives more errors than JLox. I will take care of this. I will not, however, try to tweak performance.
+The code works, but sometimes gives more errors than JLox. Maybe I will take care of this. I will not, however, try to tweak performance.
 
 ## About the name...
 
