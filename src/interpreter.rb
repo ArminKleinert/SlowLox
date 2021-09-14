@@ -167,12 +167,12 @@ module RbLox
       
       case expr.operator.type
       when :bang_equal
-        !is_equal(left, right)
+        !is_equal?(left, right)
       when :equal_equal
-        is_equal left, right
+        is_equal? left, right
       when :greater
         check_number_operands expr.operator, left, right
-        left < right
+        left > right
       when :greater_equal
         check_number_operands expr.operator, left, right
         left >= right

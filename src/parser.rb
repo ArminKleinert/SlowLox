@@ -263,7 +263,7 @@ module RbLox
       while match(:bang_equal, :equal_equal)
         operator = previous()
         right = comparison()
-        Expr::Binary.new expr, operator, right
+        expr = Expr::Binary.new expr, operator, right
       end
       
       expr

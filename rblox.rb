@@ -16,10 +16,7 @@ if !ARGV.empty?
   if File.directory? ARGV[0]
     $rblox_runmain = false
     require_relative './src/lox.rb'
-    Dir[ARGV[0].to_s + "/**/*"]
-    .reject{|f| f=="." || f==".."}
-    .reject{|f| File.directory? f}
-    .filter{|f|f.end_with? ".lox"}
+    Dir[ARGV[0].to_s + "/**/*.lox"]
     .sort
     .each do |f|
       if tests

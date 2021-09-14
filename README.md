@@ -4,8 +4,6 @@ A 1-to-1 conversion of JLox to Ruby.
 
 For the original code see https://github.com/munificent/craftinginterpreters
 
-Bug found: I discovered that the precedence of binary operators is not right currently.
-
 ## Why?
 
 Lox is a great stepping stone for writing an interpreter for non-lisp-languages. Before this one, there were no Ruby-implementations and I felt like one was needed.
